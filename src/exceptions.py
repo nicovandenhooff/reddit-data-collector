@@ -1,0 +1,2 @@
+class SubredditError(Exception):
+    pass
