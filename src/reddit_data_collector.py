@@ -1,6 +1,7 @@
 import praw
-from tqdm import tqdm
 import pandas as pd
+
+from tqdm import tqdm
 from .exceptions import SubredditError
 
 
@@ -26,7 +27,7 @@ class DataCollector:
         replies=False,
         replace_more_limit=0,
     ):
-        posts, comments = dict(), dict()
+        comments = dict()
 
         if isinstance(subreddits, str):
             subreddits = [subreddits]
@@ -34,10 +35,7 @@ class DataCollector:
         # make sure subreddits exist
         self._verify_subreddits(subreddits)
 
-        for subreddit in subreddits:
-            posts[subreddit] = self._get_subreddit_posts(
-                subreddit, post_filter, post_limit, top_filter
-            )
+        posts = self._get_posts(subreddits, post_filter, post_limit, top_filter)
 
         return posts, comments
 
@@ -54,6 +52,16 @@ class DataCollector:
             return False
         else:
             return exists[0].display_name == subreddit.lower()
+
+    def _get_posts(self, subreddits, post_filter, post_limit, top_filter):
+        posts = dict()
+
+        for subreddit in subreddits:
+            posts[subreddit] = self._get_subreddit_posts(
+                subreddit, post_filter, post_limit, top_filter
+            )
+
+        return posts
 
     def _get_subreddit_posts(self, subreddit, post_filter, post_limit, top_filter):
         subreddit_posts = []
