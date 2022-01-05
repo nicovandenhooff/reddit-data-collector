@@ -54,6 +54,8 @@ class DataCollector:
         else:
             return pd.concat(dfs.values(), ignore_index=True)
 
+    # ------------------------------HELPER FUNCTIONS------------------------------ #
+
     def _verify_subreddits(self, subreddits):
         for subreddit in subreddits:
             if not self._check_subreddit_exists(subreddit):
@@ -108,6 +110,7 @@ class DataCollector:
 
         desc = f"Collecting {post_filter} {subreddit} posts"
 
+        # a "submission" is an instance of the PRAW Subission class
         if post_filter.lower() == "new":
             for submission in tqdm(subreddit.new(limit=post_limit), desc, post_limit):
                 subreddit_posts.append(self._get_post_data(submission))
@@ -125,7 +128,7 @@ class DataCollector:
     def _get_post_data(self, submission):
         post_data = {
             "subreddit_name": submission.subreddit.display_name,
-            "submission_created_utc": submission.created_utc,
+            "post_created_utc": submission.created_utc,
             "id": submission.id,
             "is_original_content": submission.is_original_content,
             "is_self": submission.is_self,
@@ -160,6 +163,7 @@ class DataCollector:
 
         desc = f"Collecting comments for {len(post_data)} {subreddit} posts"
 
+        # a "submission" is an instance of the PRAW Subission class
         for post in tqdm(post_data, desc, len(post_data)):
             submission = self.reddit.submission(id=post["id"])
             submission.comments.replace_more(limit=replace_more_limit)
@@ -179,7 +183,7 @@ class DataCollector:
         comment_data = {
             "subreddit_name": subreddit,
             "comment_id": comment.id,
-            "submission_id": comment.link_id,
+            "post_id": comment.link_id,
             "parent_id": comment.parent_id,
             "top_level_comment": comment.parent_id == comment.link_id,
             "body": comment.body,
