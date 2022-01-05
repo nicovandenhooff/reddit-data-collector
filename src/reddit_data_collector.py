@@ -32,7 +32,9 @@ class DataCollector:
 
         self._verify_subreddits(subreddits)
         self._verify_post_filter(post_filter)
-        self._verify_top_post_filter(top_post_filter)
+
+        if top_post_filter is not None:
+            self._verify_top_post_filter(top_post_filter)
 
         posts = self._get_posts(subreddits, post_filter, post_limit, top_post_filter)
 
