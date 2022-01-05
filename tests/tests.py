@@ -1,9 +1,15 @@
 import json
 import pytest
 import pandas as pd
-from src.exceptions import FilterError, SubredditError, ColumnNameError
+
+from src.reddit_data_collector.exceptions import (
+    FilterError,
+    SubredditError,
+    ColumnNameError,
+)
+
 from src.reddit_data_collector import DataCollector
-from src.io import to_pandas, update_data
+from src.reddit_data_collector.io import to_pandas, update_data
 
 
 def load_data_collector():

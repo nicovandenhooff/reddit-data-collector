@@ -98,7 +98,7 @@ class DataCollector:
         # convert to PRAW Subreddit instance
         subreddit = self.reddit.subreddit(subreddit)
 
-        desc = f"Collecting {post_filter} {subreddit} posts"
+        desc = f"Collecting {post_filter} r/{subreddit} posts"
 
         # a "submission" is an instance of the PRAW Subission class
         if post_filter.lower() == "new":
@@ -151,7 +151,7 @@ class DataCollector:
     ):
         subreddit_comments = []
 
-        desc = f"Collecting comments for {len(subreddit_post_data)} {subreddit} posts"
+        desc = f"Collecting comments for {len(subreddit_post_data)} r/{subreddit} posts"
 
         # a "submission" is an instance of the PRAW Subission class
         for post in tqdm(subreddit_post_data, desc, len(subreddit_post_data)):
@@ -172,7 +172,7 @@ class DataCollector:
     def _get_comment_data(self, subreddit, comment):
         comment_data = {
             "subreddit_name": subreddit,
-            "comment_id": comment.id,
+            "id": comment.id,
             "post_id": comment.link_id,
             "parent_id": comment.parent_id,
             "top_level_comment": comment.parent_id == comment.link_id,
