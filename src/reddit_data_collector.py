@@ -23,12 +23,10 @@ class DataCollector:
         post_filter="new",
         post_limit=None,
         top_filter=None,
-        comments=True,
-        replies=False,
+        comment_data=False,
+        replies_data=False,
         replace_more_limit=0,
     ):
-        comments = dict()
-
         if isinstance(subreddits, str):
             subreddits = [subreddits]
 
@@ -36,6 +34,11 @@ class DataCollector:
         self._verify_subreddits(subreddits)
 
         posts = self._get_posts(subreddits, post_filter, post_limit, top_filter)
+
+        if comment_data:
+            comments = self._get_comments(posts, replies_data, replace_more_limit)
+        else:
+            comments = None
 
         return posts, comments
 
@@ -89,12 +92,6 @@ class DataCollector:
     def _get_post_data(self, submission):
         post_data = {
             "subreddit_name": submission.subreddit.display_name,
-            "author_name": submission.author.name,
-            "author_created_utc": submission.author.created_utc,
-            "author_verified_email": submission.author.has_verified_email,
-            "author_is_gold": submission.author.is_gold,
-            "author_comment_karma": submission.author.comment_karma,
-            "author_link_karma": submission.author.link_karma,
             "submission_created_utc": submission.created_utc,
             "id": submission.id,
             "is_original_content": submission.is_original_content,
@@ -112,3 +109,52 @@ class DataCollector:
         }
 
         return post_data
+
+    def _get_comments(self, posts, replies_data, replace_more_limit):
+        comments = dict()
+
+        for subreddit, post_data in posts.items():
+            comments[subreddit] = self._get_subreddit_comments(
+                subreddit, post_data, replies_data, replace_more_limit
+            )
+
+        return comments
+
+    def _get_subreddit_comments(
+        self, subreddit, post_data, replies_data, replace_more_limit
+    ):
+        subreddit_comments = []
+
+        # description for progress bar
+        desc = f"Collecting comments for {subreddit} posts"
+
+        for post in tqdm(post_data, desc, len(post_data)):
+            submission = self.reddit.submission(id=post["id"])
+            submission.comments.replace_more(limit=replace_more_limit)
+
+            if replies_data:
+                for comment in submission.comments.list():
+                    comment_data = self._get_comment_data(subreddit, comment)
+                    subreddit_comments.append(comment_data)
+            else:
+                for comment in submission.comments:
+                    comment_data = self._get_comment_data(subreddit, comment)
+                    subreddit_comments.append(comment_data)
+
+        return subreddit_comments
+
+    def _get_comment_data(self, subreddit, comment):
+        comment_data = {
+            "subreddit_name": subreddit,
+            "comment_id": comment.id,
+            "submission_id": comment.link_id,
+            "parent_id": comment.parent_id,
+            "top_level_comment": comment.parent_id == comment.link_id,
+            "body": comment.body,
+            "comment_created_utc": comment.created_utc,
+            "is_submitter": comment.is_submitter,
+            "score": comment.score,
+            "stickied": comment.stickied,
+        }
+
+        return comment_data
