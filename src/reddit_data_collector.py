@@ -43,6 +43,17 @@ class DataCollector:
 
         return posts, comments
 
+    def to_pandas(self, subreddit_data, seperate=False):
+        dfs = dict()
+
+        for subreddit, data in subreddit_data.items():
+            dfs[subreddit] = pd.DataFrame(data)
+
+        if seperate:
+            return dfs
+        else:
+            return pd.concat(dfs.values(), ignore_index=True)
+
     def _verify_subreddits(self, subreddits):
         for subreddit in subreddits:
             if not self._check_subreddit_exists(subreddit):
