@@ -139,22 +139,22 @@ class DataCollector:
     def _get_comments(self, posts, replies_data, replace_more_limit):
         comments = dict()
 
-        for subreddit, post_data in posts.items():
+        for subreddit, subreddit_post_data in posts.items():
             comments[subreddit] = self._get_subreddit_comments(
-                subreddit, post_data, replies_data, replace_more_limit
+                subreddit, subreddit_post_data, replies_data, replace_more_limit
             )
 
         return comments
 
     def _get_subreddit_comments(
-        self, subreddit, post_data, replies_data, replace_more_limit
+        self, subreddit, subreddit_post_data, replies_data, replace_more_limit
     ):
         subreddit_comments = []
 
-        desc = f"Collecting comments for {len(post_data)} {subreddit} posts"
+        desc = f"Collecting comments for {len(subreddit_post_data)} {subreddit} posts"
 
         # a "submission" is an instance of the PRAW Subission class
-        for post in tqdm(post_data, desc, len(post_data)):
+        for post in tqdm(subreddit_post_data, desc, len(subreddit_post_data)):
             submission = self.reddit.submission(id=post["id"])
             submission.comments.replace_more(limit=replace_more_limit)
 
