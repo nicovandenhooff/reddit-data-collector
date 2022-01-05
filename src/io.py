@@ -1,4 +1,5 @@
 import pandas as pd
+from .exceptions import ColumnNameError
 
 
 def to_pandas(subreddit_data, seperate=False):
@@ -14,7 +15,12 @@ def to_pandas(subreddit_data, seperate=False):
 
 
 def update_data(csv_path, df, key="id", sort="subreddit_name", save=False):
+
+    if not set(pd.read_csv(csv_path).columns) == set(df.columns):
+        raise ColumnNameError("Both data sets must have the same features")
+
     old_df = pd.read_csv(csv_path)
+
     new_df = (
         pd.concat([old_df, df], ignore_index=True)
         .drop_duplicates(subset=[key], ignore_index=True)
