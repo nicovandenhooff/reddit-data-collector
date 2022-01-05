@@ -1,8 +1,9 @@
+from logging import Filter
 import praw
 import pandas as pd
 
 from tqdm import tqdm
-from .exceptions import SubredditError
+from .exceptions import SubredditError, FilterError
 
 
 class DataCollector:
@@ -30,8 +31,9 @@ class DataCollector:
         if isinstance(subreddits, str):
             subreddits = [subreddits]
 
-        # make sure subreddits exist
         self._verify_subreddits(subreddits)
+        self._verify_post_filter(post_filter)
+        self._verify_top_filter(top_filter)
 
         posts = self._get_posts(subreddits, post_filter, post_limit, top_filter)
 
@@ -45,7 +47,8 @@ class DataCollector:
     def _verify_subreddits(self, subreddits):
         for subreddit in subreddits:
             if not self._check_subreddit_exists(subreddit):
-                raise (SubredditError(f"r/{subreddit} does not exist"))
+                msg = f"r/{subreddit} does not exist"
+                raise (SubredditError(msg))
 
     def _check_subreddit_exists(self, subreddit):
         subreddits = self.reddit.subreddits
@@ -55,6 +58,24 @@ class DataCollector:
             return False
         else:
             return exists[0].display_name == subreddit.lower()
+
+    def _verify_post_filter(self, post_filter):
+        if post_filter.lower() not in ["new", "hot", "top"]:
+            msg = f'Invalid post_filter: "{post_filter}"'
+            raise (FilterError(msg))
+
+    def _verify_top_filter(self, top_filter):
+        if top_filter.lower() not in [
+            None,
+            "all",
+            "day",
+            "hour",
+            "month",
+            "week",
+            "year",
+        ]:
+            msg = f'Invalid top_filter: "{top_filter}"'
+            raise (FilterError(msg))
 
     def _get_posts(self, subreddits, post_filter, post_limit, top_filter):
         posts = dict()
