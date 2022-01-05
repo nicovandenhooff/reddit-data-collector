@@ -1,7 +1,9 @@
 import json
 import pytest
-from src.exceptions import FilterError, SubredditError
+import pandas as pd
+from src.exceptions import FilterError, SubredditError, ColumnNameError
 from src.reddit_data_collector import DataCollector
+from src.io import to_pandas, update_data
 
 
 def load_data_collector():
@@ -405,3 +407,103 @@ def test_constructor():
     )
 
     assert isinstance(data_collector.reddit, Reddit)
+
+
+def get_fake_data():
+    fake_data = {
+        "pics": [
+            {
+                "subreddit_name": "pics",
+                "post_created_utc": 1639583560.0,
+                "id": "rh25ex",
+                "is_original_content": False,
+                "is_self": True,
+                "link_flair_text": "Politics",
+                "locked": False,
+                "num_comments": 237,
+                "over_18": False,
+                "score": 155,
+                "spoiler": False,
+                "stickied": True,
+                "title": "Some Clarifications About Abortion-Centric Debates",
+                "upvote_ratio": 0.87,
+                "url": "https://www.reddit.com/r/pics/comments/rh25ex/some_clarifications_about_abortioncentric_debates/",
+            }
+        ],
+        "learnmachinelearning": [
+            {
+                "subreddit_name": "learnmachinelearning",
+                "post_created_utc": 1641392392.0,
+                "id": "rwnzi9",
+                "is_original_content": False,
+                "is_self": True,
+                "link_flair_text": None,
+                "locked": False,
+                "num_comments": 6,
+                "over_18": False,
+                "score": 32,
+                "spoiler": False,
+                "stickied": False,
+                "title": "Intutive source for probability?",
+                "upvote_ratio": 0.93,
+                "url": "https://www.reddit.com/r/learnmachinelearning/comments/rwnzi9/intutive_source_for_probability/",
+            }
+        ],
+    }
+
+    return fake_data
+
+
+def test_to_pandas():
+
+    subreddit_data = get_fake_data()
+
+    # save as a single concatenated df
+    df = to_pandas(subreddit_data, seperate=False)
+
+    # save a dictionary of dfs
+    dfs = to_pandas(subreddit_data, seperate=True)
+
+    # tests for single df
+    assert isinstance(df, pd.DataFrame)
+    assert df.shape[0] == len(subreddit_data)
+    assert df.shape[1] == len(subreddit_data["pics"][0])
+    assert set(df.columns) == set(subreddit_data["pics"][0].keys())
+
+    # tests for dictionary of dfs
+    assert isinstance(dfs, dict)
+    assert len(dfs) == len(subreddit_data)
+    assert isinstance(dfs["pics"], pd.DataFrame)
+    assert isinstance(dfs["learnmachinelearning"], pd.DataFrame)
+    assert isinstance(dfs, dict)
+    assert len(dfs) == len(subreddit_data)
+    assert isinstance(dfs["pics"], pd.DataFrame)
+    assert isinstance(dfs["learnmachinelearning"], pd.DataFrame)
+    assert dfs["pics"].shape[0] == len(subreddit_data["pics"])
+    assert dfs["learnmachinelearning"].shape[0] == len(
+        subreddit_data["learnmachinelearning"]
+    )
+    assert set(dfs["learnmachinelearning"]) == set(subreddit_data["pics"][0].keys())
+    assert set(dfs["learnmachinelearning"]) == set(
+        subreddit_data["learnmachinelearning"][0].keys()
+    )
+
+
+def test_update_data_valid():
+    csv_path = "tests/test_data.csv"
+    df = pd.DataFrame(to_pandas(get_fake_data()))
+    new_df = update_data(csv_path, df)
+
+    assert isinstance(new_df, pd.DataFrame)
+    assert new_df["id"].duplicated().sum() == 0
+    assert pd.read_csv(csv_path).shape[0] <= new_df.shape[0]
+    assert pd.read_csv(csv_path).shape[1] == new_df.shape[1]
+    assert set(pd.read_csv(csv_path).columns) == set(df.columns)
+
+
+def test_update_data_invalid():
+    csv_path = "tests/test_data.csv"
+    df = pd.DataFrame(to_pandas(get_fake_data())).drop("subreddit_name", axis=1)
+
+    with pytest.raises(ColumnNameError):
+        new_df = update_data(csv_path, df)
