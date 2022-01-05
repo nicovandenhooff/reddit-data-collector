@@ -50,7 +50,10 @@ class DataCollector:
                 raise (SubredditError(msg))
 
     def _check_subreddit_exists(self, subreddit):
+        # PRAW Subreddits instance
         subreddits = self.reddit.subreddits
+
+        # may return numerous similar subreddits, first value should match
         exists = subreddits.search_by_name(subreddit)
 
         if not exists:
@@ -89,10 +92,9 @@ class DataCollector:
     def _get_subreddit_posts(self, subreddit, post_filter, post_limit, top_post_filter):
         subreddit_posts = []
 
-        # temporarily convert to PRAW Subreddit instance
+        # convert to PRAW Subreddit instance
         subreddit = self.reddit.subreddit(subreddit)
 
-        # description for progress bar
         desc = f"Collecting {post_filter} {subreddit} posts"
 
         if post_filter.lower() == "new":
@@ -145,8 +147,7 @@ class DataCollector:
     ):
         subreddit_comments = []
 
-        # description for progress bar
-        desc = f"Collecting comments for {subreddit} posts"
+        desc = f"Collecting comments for {len(post_data)} {subreddit} posts"
 
         for post in tqdm(post_data, desc, len(post_data)):
             submission = self.reddit.submission(id=post["id"])
