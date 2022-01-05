@@ -1,4 +1,3 @@
-from logging import Filter
 import praw
 import pandas as pd
 
@@ -23,7 +22,7 @@ class DataCollector:
         subreddits,
         post_filter="new",
         post_limit=None,
-        top_filter=None,
+        top_post_filter=None,
         comment_data=False,
         replies_data=False,
         replace_more_limit=0,
@@ -33,9 +32,9 @@ class DataCollector:
 
         self._verify_subreddits(subreddits)
         self._verify_post_filter(post_filter)
-        self._verify_top_filter(top_filter)
+        self._verify_top_post_filter(top_post_filter)
 
-        posts = self._get_posts(subreddits, post_filter, post_limit, top_filter)
+        posts = self._get_posts(subreddits, post_filter, post_limit, top_post_filter)
 
         if comment_data:
             comments = self._get_comments(posts, replies_data, replace_more_limit)
@@ -64,8 +63,8 @@ class DataCollector:
             msg = f'Invalid post_filter: "{post_filter}"'
             raise (FilterError(msg))
 
-    def _verify_top_filter(self, top_filter):
-        if top_filter.lower() not in [
+    def _verify_top_post_filter(self, top_post_filter):
+        if top_post_filter.lower() not in [
             None,
             "all",
             "day",
@@ -74,20 +73,20 @@ class DataCollector:
             "week",
             "year",
         ]:
-            msg = f'Invalid top_filter: "{top_filter}"'
+            msg = f'Invalid top_post_filter: "{top_post_filter}"'
             raise (FilterError(msg))
 
-    def _get_posts(self, subreddits, post_filter, post_limit, top_filter):
+    def _get_posts(self, subreddits, post_filter, post_limit, top_post_filter):
         posts = dict()
 
         for subreddit in subreddits:
             posts[subreddit] = self._get_subreddit_posts(
-                subreddit, post_filter, post_limit, top_filter
+                subreddit, post_filter, post_limit, top_post_filter
             )
 
         return posts
 
-    def _get_subreddit_posts(self, subreddit, post_filter, post_limit, top_filter):
+    def _get_subreddit_posts(self, subreddit, post_filter, post_limit, top_post_filter):
         subreddit_posts = []
 
         # temporarily convert to PRAW Subreddit instance
@@ -105,7 +104,7 @@ class DataCollector:
                 subreddit_posts.append(self._get_post_data(submission))
 
         elif post_filter.lower() == "top":
-            for submission in tqdm(subreddit.top(time_filter=top_filter), desc):
+            for submission in tqdm(subreddit.top(time_filter=top_post_filter), desc):
                 subreddit_posts.append(self._get_post_data(submission))
 
         return subreddit_posts
