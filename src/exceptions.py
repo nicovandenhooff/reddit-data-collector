@@ -4,3 +4,7 @@ class SubredditError(Exception):
 
 class FilterError(Exception):
     pass
+
+
+class ColumnNameError(Exception):
+    pass
