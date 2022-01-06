@@ -1,3 +1,10 @@
+"""
+This module contains the tests for:
+    src.reddit_data_collector.reddit_data_collector
+    src.reddit_data_collector.io
+"""
+
+
 import json
 import pytest
 import pandas as pd
@@ -13,6 +20,7 @@ from src.reddit_data_collector.io import to_pandas, update_data
 
 
 def load_data_collector():
+    """Loads a common instance of `DataCollector` for use in most tests."""
     with open("tests/credentials.json") as f:
         login = json.load(f)
         client_id = login["client_id"]
@@ -25,18 +33,21 @@ def load_data_collector():
 
 
 def test_check_subreddit_exists():
+    """Tests the function that checks if a subreddit exists."""
     data_collector = load_data_collector()
     assert data_collector._check_subreddit_exists("announcements") == True
     assert data_collector._check_subreddit_exists("ann0unc3m3ntz") == False
 
 
 def test_verify_subreddits_valid():
+    """Tests the verification of subreddits with valid values."""
     subreddits = ["announcements", "funny"]
     data_collector = load_data_collector()
     assert data_collector._verify_subreddits(subreddits) is None
 
 
 def test_verify_subreddits_invalid():
+    """Tests the verification of subreddits with invalid values."""
     subreddits = ["ann0unc3m3ntz", "funny"]
     data_collector = load_data_collector()
 
@@ -45,11 +56,15 @@ def test_verify_subreddits_invalid():
 
 
 def test_verify_post_filter_valid():
+    """Tests the verification of a post filter with valid values."""
     data_collector = load_data_collector()
     assert data_collector._verify_post_filter("hot") is None
+    assert data_collector._verify_post_filter("new") is None
+    assert data_collector._verify_post_filter("top") is None
 
 
 def test_verify_post_filter_invalid():
+    """Tests the verification of a post filter with invalid values."""
     data_collector = load_data_collector()
 
     with pytest.raises(FilterError):
@@ -57,11 +72,18 @@ def test_verify_post_filter_invalid():
 
 
 def test_verify_top_post_filter_valid():
+    """Tests the verification of a top post filter with valid values."""
     data_collector = load_data_collector()
+    assert data_collector._verify_top_post_filter("all") is None
+    assert data_collector._verify_top_post_filter("day") is None
     assert data_collector._verify_top_post_filter("hour") is None
+    assert data_collector._verify_top_post_filter("month") is None
+    assert data_collector._verify_top_post_filter("week") is None
+    assert data_collector._verify_top_post_filter("year") is None
 
 
 def test_verify_top_post_filter_invalid():
+    """Tests the verification of a top post filter with invalid values."""
     data_collector = load_data_collector()
 
     with pytest.raises(FilterError):
@@ -69,6 +91,7 @@ def test_verify_top_post_filter_invalid():
 
 
 def test_get_post_data():
+    """Tests getting the post data for a single subreddit submission."""
     data_collector = load_data_collector()
 
     # most popular post on reddit, if test fails check that it still exists
@@ -81,6 +104,7 @@ def test_get_post_data():
 
 
 def test_get_subreddit_posts_new():
+    """Tests getting 1 new post for a single subreddit."""
     data_collector = load_data_collector()
 
     subreddit = "pics"
@@ -100,6 +124,7 @@ def test_get_subreddit_posts_new():
 
 
 def test_get_subreddit_posts_hot():
+    """Tests getting 3 hot posts for a single subreddit."""
     data_collector = load_data_collector()
 
     subreddit = "pics"
@@ -119,6 +144,7 @@ def test_get_subreddit_posts_hot():
 
 
 def test_get_subreddit_posts_top():
+    """Tests getting the top daily posts for a single subreddit."""
     data_collector = load_data_collector()
 
     subreddit = "apple"
@@ -137,6 +163,7 @@ def test_get_subreddit_posts_top():
 
 
 def test_get_posts_single():
+    """Tests getting 2 hot posts for a single subreddit."""
     data_collector = load_data_collector()
 
     subreddits = ["pics"]
@@ -158,6 +185,7 @@ def test_get_posts_single():
 
 
 def test_get_posts_multiple():
+    """Tests getting 2 hot posts for a multiple subreddits."""
     data_collector = load_data_collector()
 
     subreddits = ["pics", "funny"]
@@ -184,6 +212,7 @@ def test_get_posts_multiple():
 
 
 def test_get_comment_data():
+    """Tests getting the comment data for a single subreddit post."""
     data_collector = load_data_collector()
 
     # very popular post on reddit, if test fails check that it still exists
@@ -196,6 +225,7 @@ def test_get_comment_data():
 
 
 def test_get_subreddit_comments_top_level():
+    """Tests getting the top_level comment data for a multiple subreddit posts."""
     data_collector = load_data_collector()
     subreddit = "learnmachinelearning"
 
@@ -225,6 +255,7 @@ def test_get_subreddit_comments_top_level():
 
 
 def test_get_subreddit_comments_all():
+    """Tests getting the comment and reply data for a multiple subreddit posts."""
     data_collector = load_data_collector()
     subreddit = "learnmachinelearning"
 
@@ -256,6 +287,7 @@ def test_get_subreddit_comments_all():
 
 
 def test_get_comments_one_subreddit():
+    """Tests getting the comment data for one subreddit."""
     data_collector = load_data_collector()
 
     posts = {
@@ -280,6 +312,7 @@ def test_get_comments_one_subreddit():
 
 
 def test_get_comments_multiple_subreddit():
+    """Tests getting the comment data for multiple subreddits."""
     data_collector = load_data_collector()
 
     posts = {
@@ -312,7 +345,7 @@ def test_get_comments_multiple_subreddit():
 
 
 def test_get_data_posts_and_comments():
-
+    """Tests getting the post and comment data for multiple subreddits."""
     data_collector = load_data_collector()
 
     subreddits = ["pics", "learnmachinelearning"]
@@ -363,7 +396,7 @@ def test_get_data_posts_and_comments():
 
 
 def test_get_data_posts_only():
-
+    """Tests getting only the post data for multiple subreddits."""
     data_collector = load_data_collector()
 
     subreddits = ["pics", "learnmachinelearning"]
@@ -397,7 +430,7 @@ def test_get_data_posts_only():
 
 
 def test_constructor():
-
+    """Tests the DataCollector constructor."""
     from praw import Reddit
 
     with open("tests/credentials.json") as f:
@@ -416,6 +449,7 @@ def test_constructor():
 
 
 def get_fake_data():
+    """Returns fake data used in the following tests."""
     fake_data = {
         "pics": [
             {
@@ -461,7 +495,7 @@ def get_fake_data():
 
 
 def test_to_pandas():
-
+    """Tests the `to_pandas` method in `reddit_data_collector.io`."""
     subreddit_data = get_fake_data()
 
     # save as a single concatenated df
@@ -496,6 +530,7 @@ def test_to_pandas():
 
 
 def test_update_data_valid():
+    """Tests the `update_data` method in `reddit_data_collector.io` with valid input."""
     csv_path = "tests/test_data.csv"
     df = pd.DataFrame(to_pandas(get_fake_data()))
     new_df = update_data(csv_path, df)
@@ -508,6 +543,7 @@ def test_update_data_valid():
 
 
 def test_update_data_invalid():
+    """Tests the `update_data` method in `reddit_data_collector.io` with invalid input."""
     csv_path = "tests/test_data.csv"
     df = pd.DataFrame(to_pandas(get_fake_data())).drop("subreddit_name", axis=1)
 
