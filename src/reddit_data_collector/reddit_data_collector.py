@@ -112,7 +112,7 @@ class DataCollector:
     >>> posts_df.to_csv("posts.csv", index=False)
     >>> comments_df.to_csv("posts.csv", index=False)
 
-    Note that all of the parameters passed to DataCollector in the above
+    Note that all of the parameters passed to `DataCollector` in the above
     example are fake.
     """
 
@@ -247,7 +247,7 @@ class DataCollector:
     def _verify_post_filter(self, post_filter):
         """Verifies that a post filter is valid.
 
-        Throws FilterError if a invalid post filter is used.
+        Raises FilterError if a invalid post filter is used.
         """
         if post_filter.lower() not in ["new", "hot", "top"]:
             msg = f"Invalid post_filter used: {post_filter}"
@@ -256,7 +256,7 @@ class DataCollector:
     def _verify_top_post_filter(self, top_post_filter):
         """Verifies that a top post filter is valid.
 
-        Throws FilterError if a invalid top post filter is used.
+        Raises FilterError if a invalid top post filter is used.
         """
         if top_post_filter.lower() not in [
             None,
