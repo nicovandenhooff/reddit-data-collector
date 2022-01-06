@@ -66,7 +66,7 @@ class DataCollector:
 
     def _verify_post_filter(self, post_filter):
         if post_filter.lower() not in ["new", "hot", "top"]:
-            msg = f'Invalid post_filter: "{post_filter}"'
+            msg = f"Invalid post_filter used: {post_filter}"
             raise (FilterError(msg))
 
     def _verify_top_post_filter(self, top_post_filter):
@@ -79,7 +79,7 @@ class DataCollector:
             "week",
             "year",
         ]:
-            msg = f'Invalid top_post_filter: "{top_post_filter}"'
+            msg = f"Invalid top_post_filter used: {top_post_filter}"
             raise (FilterError(msg))
 
     def _get_posts(self, subreddits, post_filter, post_limit, top_post_filter):
