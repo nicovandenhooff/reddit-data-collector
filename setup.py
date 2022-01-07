@@ -14,6 +14,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/nicovandenhooff/reddit-data-collector",
     author="Nico Van den Hooff",
+    license="MIT",
     classifiers=[
         "Intended Audience :: Science/Research",
         "Development Status :: 4 - Beta",
