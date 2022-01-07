@@ -18,7 +18,6 @@ setup(
     classifiers=[
         "Intended Audience :: Science/Research",
         "Development Status :: 4 - Beta",
-        "Topic :: Machine Learning :: Data Collection Tool",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
