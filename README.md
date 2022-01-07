@@ -16,9 +16,8 @@ It is currently maintained by [Nico Van den Hooff](https://www.nicovandenhooff.c
 
 ### Dependencies
 
-Reddit Data Collector requires:
+Reddit Data Collector requires Python and:
 
-- Python (>=3.6)
 - pandas (>=1.3.5)
 - praw (>=7.5.0)
 - tqdm (>=4.62.3)
