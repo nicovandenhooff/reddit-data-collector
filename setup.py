@@ -26,7 +26,6 @@ setup(
     keywords="reddit, data science, machine learning, data collection, text",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
-    python_requires=">=3.6, <4",
     install_requires=["pandas>=1.3.5", "praw>=7.5.0", "tqdm>=4.62.3"],
     project_urls={
         "Examples": "https://github.com/nicovandenhooff/reddit-data-collector/tree/main/examples",
