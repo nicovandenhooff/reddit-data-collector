@@ -1,7 +1,7 @@
 """
 The module `reddit_data_collector.io` includes useful input/output functions
 that assist in converting and/or saving data collected from Reddit with
-Reddit Data Colletor.
+Reddit Data Collector.
 """
 
 import pandas as pd
