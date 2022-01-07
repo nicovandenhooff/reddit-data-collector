@@ -6,7 +6,7 @@ Reddit Data Collector is a Python module that allows a user to collect post
 and comment data from Reddit.  It is built on top of the Python module PRAW,
 which stands for "The Python Reddit API Wrapper".  It aims to make it very
 simple for a user to collect data from Reddit, without having to learn the
-inner workings of PRAW.
+inner workings of PRAW or the Reddit API.
 
 The main functionalities provided by the module currently include:
     1. Ability to collect a sample of post data and comment data from Reddit
