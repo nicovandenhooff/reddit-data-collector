@@ -35,7 +35,7 @@ pip install reddit-data-collector
 ### Important links
 
 - Official source code repo: https://github.com/nicovandenhooff/reddit-data-collector
-- Downloaded releases: https://pypi.org/project/sampleproject/reddit-data-collector/
+- Downloaded releases: https://pypi.org/project/reddit-data-collector/
 - Issue tracker: https://github.com/nicovandenhooff/reddit-data-collector/issues
 
 ### Source code
