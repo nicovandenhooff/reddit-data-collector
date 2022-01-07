@@ -47,8 +47,8 @@ def to_pandas(subreddit_data, seperate=False):
     >>> import reddit_data_collector as rdc
     >>> # create instance of DataCollector
     >>> data_collector = rdc.DataCollector(
-    ...     "xfet7fsx9sjf8s",
-    ...     "DSR_89788fff_fdsfsdf43_f98",
+    ...     "<your_client_id>",
+    ...     "<your_client_secret>",
     ...     "mac:script:v1.0 (by u/FakeRedditUser)",
     ...     "FakeRedditUser",
     ...     "FakePassword"
@@ -149,8 +149,8 @@ def update_data(csv_path, df, key="id", sort="subreddit_name", save=False):
     >>> import reddit_data_collector as rdc
     >>> # create instance of DataCollector
     >>> data_collector = rdc.DataCollector(
-    ...     "xfet7fsx9sjf8s",
-    ...     "DSR_89788fff_fdsfsdf43_f98",
+    ...     "<your_client_id>",
+    ...     "<your_client_secret>",
     ...     "mac:script:v1.0 (by u/FakeRedditUser)",
     ...     "FakeRedditUser",
     ...     "FakePassword"

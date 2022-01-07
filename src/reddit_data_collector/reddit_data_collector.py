@@ -91,8 +91,8 @@ class DataCollector:
     >>> import reddit_data_collector as rdc
     >>> # create instance of DataCollector
     >>> data_collector = rdc.DataCollector(
-    ...     "xfet7fsx9sjf8s",
-    ...     "DSR_89788fff_fdsfsdf43_f98",
+    ...     "<your_client_id>",
+    ...     "<your_client_secret>",
     ...     "mac:script:v1.0 (by u/FakeRedditUser)",
     ...     "FakeRedditUser",
     ...     "FakePassword"
