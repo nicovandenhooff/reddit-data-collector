@@ -8,25 +8,28 @@ which stands for "The Python Reddit API Wrapper".  It aims to make it very
 simple for a user to collect data from Reddit, without having to learn the
 inner workings of PRAW.
 
-Further, the module aims to provide the following workflow to a user:
-    1. Ability to collect a sample of post data and comment data from Reddit,
-       by simply providing the subreddit names the data is desired from.
-    2. Ability to convert that data into a pandas `DataFrame` in order to save
-       it for further use.
+The main functionalities provided by the module currently include:
+    1. Ability to collect a sample of post data and comment data from Reddit
+       by simply providing the subreddit names that you wish to collect data
+       from.
+    2. Ability to convert that data into a pandas `DataFrame` in order to 
+       inspect it and save it for further use.
     3. Ability to seamlessly update an existing .csv file that contains some 
        sample data collected with the module in the past, with some new 
        sample data that is also collected with the module.
 
-This workflow should allow a user to build a sample of Reddit data over a
-period of time.  For example, a user could collect a sample from Reddit each
-day for a month, and each time a sample is collected, add it to a universal
-.csv file in order to compile the data. At the end of the month, the user 
-would have a months worth data sampled from Reddit, for which they could now 
-analyze further (e.g. with Natural Language Processing).
+The functionalities above should allow a user to build a good sample of Reddit 
+data over a period of time.  For example, a user could collect a sample from 
+Reddit each day for a month, and each time a sample is collected add it to a 
+universal `.csv` file in order to compile the data. At the end of the month, 
+the user would have a months worth data sampled from Reddit, for which they 
+could now analyze further (e.g. with Natural Language Processing).
 
-This workflow was inspired since the Reddit API does not allow you to perform 
-one large scrape of historical data (e.g. collect all posts from subreddit X 
-from January 2015 to December 2020).
+The creation of Reddit Data Collector was inspired since the Reddit API does 
+not allow you to perform one large scrape of historical data (e.g. collect 
+all posts from subreddit X from January 2015 to December 2020).  Therefore
+this module provides an alternative option to build a data set by collecting
+data over time.
 """
 
 import praw
