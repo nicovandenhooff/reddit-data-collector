@@ -8,7 +8,7 @@ import pandas as pd
 from .exceptions import ColumnNameError
 
 
-def to_pandas(subreddit_data, seperate=False):
+def to_pandas(subreddit_data, separate=False):
     """Convert post or comment data collected to a pandas `DataFrame`.
 
     Parameters
@@ -17,17 +17,17 @@ def to_pandas(subreddit_data, seperate=False):
         Post or comment data collected with the `DataCollector.get_data`
         method.
 
-    seperate : bool, default=False
-        Whether or not to return a seperate pandas `DataFrame` for the
+    separate : bool, default=False
+        Whether or not to return a separate pandas `DataFrame` for the
         data of each subreddit.
 
     Returns
     -------
     df or dfs : pd.DataFrame or dict
-        If seperate is `False`, returns a pandas `DataFrame` containing
+        If separate is `False`, returns a pandas `DataFrame` containing
         the post or comment data.
 
-        If seperate is `True` returns a Python dictionary containing
+        If separate is `True` returns a Python dictionary containing
         a pandas `DataFrame` for each subreddit that existed in the
         post or comment data.  The dictionary keys are the subreddits
         names.  The dictionary values are pandas `DataFrame`s of post
@@ -76,7 +76,7 @@ def to_pandas(subreddit_data, seperate=False):
     for subreddit, data in subreddit_data.items():
         dfs[subreddit] = pd.DataFrame(data)
 
-    if seperate:
+    if separate:
         return dfs
     else:
         return pd.concat(dfs.values(), ignore_index=True)

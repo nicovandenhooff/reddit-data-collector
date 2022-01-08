@@ -57,7 +57,7 @@ class DataCollector:
 
     Finally, for safety, it is recommended that the parameters below are not hard-coded
     directly into a program that uses Reddit Data Collector.  Rather, they should be
-    kept in a seperate credentials file as data which is then read into the program.
+    kept in a separate credentials file as data which is then read into the program.
     (e.g. a JSON credentials file that is read into a program with a Python `with`
     clause).
 
