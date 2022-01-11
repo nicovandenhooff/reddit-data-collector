@@ -58,6 +58,8 @@ To learn more about making a contribution to Reddit Data Collector, please see t
 
 - Add ability to collect images from Reddit posts that contain them.
 - Add author information to post and comment data, currently the Reddit API is inconsistent with suspended and deleted author data, so this functionality has not been built in yet.
+- Add plotting module that creates useful visualizations of the data that has been collected
+- Add preprocessing module that cleans up the posts and/or comment data collected
 
 ### Testing
 
