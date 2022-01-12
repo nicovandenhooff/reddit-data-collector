@@ -8,7 +8,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="reddit-data-collector",
-    version="1.0.0",
+    version="1.0.1",
     description="A Python package that is used to download posts and comments from Reddit.",
     long_description=long_description,
     long_description_content_type="text/markdown",
