@@ -63,7 +63,7 @@ To learn more about making a contribution to Reddit Data Collector, please see t
 
 ### Testing
 
-After installation, you can launch the test suite, which is contained in the `tests/tests.py`.  Note that you will have to have `pytest` >= 6.2.5 installed.  You can launch the test suite by following these steps from the projects root directory:
+After installation, you can launch the test suite, which is contained in the `tests/tests.py`.  Note that you will have to have `pytest` >= 6.2.5 and `pytest-cov` >= 3.0.0 installed.  You can launch the test suite by following these steps from the projects root directory:
 
 1. Open up `tests.py` with the following command:
 
@@ -73,10 +73,16 @@ open tests/tests.py
 
 Comment out lines 24 to 30.  Change the values in `DataCollector()` in line 32 to your Reddit credentials.
 
-2. Run the following command:
+2. Run the following command to run the tests:
 
 ```shell
-pytest tests/test.py
+pytest tests/tests.py
+```
+
+3. If desired, run the following command to show test coverage:
+
+```shell
+pytest --cov=src tests/tests.py
 ```
 
 ## Project History
