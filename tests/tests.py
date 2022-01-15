@@ -41,7 +41,7 @@ def test_check_subreddit_exists():
 
 def test_verify_subreddits_valid():
     """Tests the verification of subreddits with valid values."""
-    subreddits = ["announcements", "funny"]
+    subreddits = ["announcements", "funny", "AskReddit"]
     data_collector = load_data_collector()
     assert data_collector._verify_subreddits(subreddits) is None
 
@@ -499,10 +499,10 @@ def test_to_pandas():
     subreddit_data = get_fake_data()
 
     # save as a single concatenated df
-    df = to_pandas(subreddit_data, seperate=False)
+    df = to_pandas(subreddit_data, separate=False)
 
     # save a dictionary of dfs
-    dfs = to_pandas(subreddit_data, seperate=True)
+    dfs = to_pandas(subreddit_data, separate=True)
 
     # tests for single df
     assert isinstance(df, pd.DataFrame)

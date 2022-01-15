@@ -245,7 +245,7 @@ class DataCollector:
         if not exists:
             return False
         else:
-            return exists[0].display_name == subreddit.lower()
+            return exists[0].display_name.lower() == subreddit.lower()
 
     def _verify_post_filter(self, post_filter):
         """Verifies that a post filter is valid.
