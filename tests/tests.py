@@ -9,14 +9,14 @@ import json
 import pytest
 import pandas as pd
 
+from praw import Reddit
+from src.reddit_data_collector import DataCollector
+from src.reddit_data_collector.io import to_pandas, update_data
 from src.reddit_data_collector.exceptions import (
     FilterError,
     SubredditError,
     ColumnNameError,
 )
-
-from src.reddit_data_collector import DataCollector
-from src.reddit_data_collector.io import to_pandas, update_data
 
 
 def load_data_collector():
@@ -41,6 +41,13 @@ def load_data_collector():
             password = login["password"]
 
         return DataCollector(client_id, client_secret, user_agent, username, password)
+
+
+def test_constructor():
+    """Tests the DataCollector constructor."""
+    data_collector = load_data_collector()
+
+    assert isinstance(data_collector.reddit, Reddit)
 
 
 def test_check_subreddit_exists():
@@ -438,25 +445,6 @@ def test_get_data_posts_only():
     assert len(posts[subreddits[1]][0]) == 15
 
     assert comments is None
-
-
-def test_constructor():
-    """Tests the DataCollector constructor."""
-    from praw import Reddit
-
-    with open("tests/credentials.json") as f:
-        login = json.load(f)
-        client_id = login["client_id"]
-        client_secret = login["client_secret"]
-        user_agent = login["user_agent"]
-        username = login["username"]
-        password = login["password"]
-
-    data_collector = DataCollector(
-        client_id, client_secret, user_agent, username, password
-    )
-
-    assert isinstance(data_collector.reddit, Reddit)
 
 
 def get_fake_data():
