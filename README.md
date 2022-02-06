@@ -1,5 +1,6 @@
 [![ci](https://github.com/nicovandenhooff/reddit-data-collector/actions/workflows/ci.yml/badge.svg)](https://github.com/nicovandenhooff/reddit-data-collector/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/nicovandenhooff/reddit-data-collector/branch/main/graph/badge.svg?token=G6KM5UCJ8N)](https://codecov.io/gh/nicovandenhooff/reddit-data-collector)
+![license](https://img.shields.io/github/license/nicovandenhooff/reddit-data-collector)
 
 # Reddit Data Collector
 
