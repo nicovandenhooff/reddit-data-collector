@@ -4,7 +4,7 @@ This module contains the tests for:
     src.reddit_data_collector.io
 """
 
-
+import os
 import json
 import pytest
 import pandas as pd
@@ -21,15 +21,26 @@ from src.reddit_data_collector.io import to_pandas, update_data
 
 def load_data_collector():
     """Loads a common instance of `DataCollector` for use in most tests."""
-    with open("tests/credentials.json") as f:
-        login = json.load(f)
-        client_id = login["client_id"]
-        client_secret = login["client_secret"]
-        user_agent = login["user_agent"]
-        username = login["username"]
-        password = login["password"]
 
-    return DataCollector(client_id, client_secret, user_agent, username, password)
+    # for GitHub actions
+    if os.environ.get("CLIENT_ID") is not None:
+        client_id = os.environ["CLIENT_ID"]
+        client_secret = os.environ["CLIENT_SECRET"]
+        user_agent = os.environ["USER_AGENT"]
+
+        return DataCollector(client_id, client_secret, user_agent)
+
+    # for local test runs
+    else:
+        with open("tests/credentials.json") as f:
+            login = json.load(f)
+            client_id = login["client_id"]
+            client_secret = login["client_secret"]
+            user_agent = login["user_agent"]
+            username = login["username"]
+            password = login["password"]
+
+        return DataCollector(client_id, client_secret, user_agent, username, password)
 
 
 def test_check_subreddit_exists():
