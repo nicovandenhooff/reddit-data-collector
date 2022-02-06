@@ -1,3 +1,6 @@
+[![ci](https://github.com/nicovandenhooff/reddit-data-collector/actions/workflows/ci.yml/badge.svg)](https://github.com/nicovandenhooff/reddit-data-collector/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/nicovandenhooff/reddit-data-collector/branch/main/graph/badge.svg?token=G6KM5UCJ8N)](https://codecov.io/gh/nicovandenhooff/reddit-data-collector)
+
 # Reddit Data Collector
 
 Reddit Data Collector is a Python package that allows a user to collect post and comment data from Reddit. It is built on top of the Python module [PRAW](https://praw.readthedocs.io/en/stable/), which stands for "The Python Reddit API Wrapper". It aims to make it very simple for a user to collect data from Reddit for further analysis (e.g. Natural Language Processing), without having to learn the inner workings of PRAW or the Reddit API.
