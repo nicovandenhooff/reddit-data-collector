@@ -9,12 +9,12 @@ from .exceptions import ColumnNameError
 
 
 def to_pandas(subreddit_data, separate=False):
-    """Convert post or comment data collected to a pandas `DataFrame`.
+    """Convert raw post or comment data collected to a pandas `DataFrame`.
 
     Parameters
     ----------
     subreddit_data : dict
-        Post or comment data collected with the `DataCollector.get_data`
+        Raw post or comment data collected with the `DataCollector.get_data`
         method.
 
     separate : bool, default=False
@@ -29,7 +29,7 @@ def to_pandas(subreddit_data, separate=False):
 
         If separate is `True` returns a Python dictionary containing
         a pandas `DataFrame` for each subreddit that existed in the
-        post or comment data.  The dictionary keys are the subreddits
+        post or comment data.  The dctionary keys are the subreddits
         names.  The dictionary values are pandas `DataFrame`s of post
         or comment data.
 
@@ -41,35 +41,6 @@ def to_pandas(subreddit_data, separate=False):
     reddit_data_collector.io.update_data
         Update a `.csv` file containing existing post or comment
         data collected with new data collected with `DataCollector`.
-
-    Examples
-    --------
-    >>> import reddit_data_collector as rdc
-    >>> # create instance of DataCollector
-    >>> data_collector = rdc.DataCollector(
-    ...     "<your_client_id>",
-    ...     "<your_client_secret>",
-    ...     "mac:script:v1.0 (by u/FakeRedditUser)",
-    ...     "FakeRedditUser",
-    ...     "FakePassword"
-    ... )
-    >>> # collect some data from Reddit
-    >>> subreddits = ["pics", "funny"]
-    >>> post_filter = "hot"
-    >>> comment_data = True
-    >>> replies_data = True
-    >>> posts, comments = data_collector(
-    ...     subreddits=subreddits,
-    ...     post_filter=post_filter,
-    ...     comment_data=comment_data,
-    ...     replies_data=replies_data
-    ... )
-    >>> # convert data to pandas DataFrame
-    >>> posts_df = rdc.to_pandas(posts)
-    >>> comments_df = rdc.to_pandas(comments)
-
-    Note that all of the parameters passed to `DataCollector` in the above
-    example are fake.
     """
     dfs = dict()
 
@@ -82,7 +53,7 @@ def to_pandas(subreddit_data, separate=False):
         return pd.concat(dfs.values(), ignore_index=True)
 
 
-def update_data(csv_path, df, key="id", sort="subreddit_name", save=False):
+def update_data(csv_path, df, key="id", sort="subreddit_name", save=True):
     """Update a `.csv` file containing post or comment data with new data.
 
     The main purpose of this method is to allow a user to update a `.csv`
@@ -117,11 +88,9 @@ def update_data(csv_path, df, key="id", sort="subreddit_name", save=False):
         How to sort the new data.  By default sorts the data by subreddit.
         This is purely aesthetic and has no impact on the data itself.
 
-    save : bool, default=False
+    save : bool, default=True
         Whether or not to automatically overwrite the existing `.csv`
-        file with the new data.  Default is `False` in order to allow
-        the user to inspect the data in Python first before saving
-        manually.  Set to `True` if this is not desired.
+        file with the new data.
 
     Returns
     -------
@@ -141,8 +110,8 @@ def update_data(csv_path, df, key="id", sort="subreddit_name", save=False):
         Class that performs the data collection from Reddit.
 
     reddit_data_collector.io.to_pandas
-        Used to convert `posts` or `comments` collected with `DataCollector`
-        to a pandas `DataFrame`.
+        Used to convert raw `posts` or `comments` collected with
+        `DataCollector` to a pandas `DataFrame`.
 
     Examples
     --------
@@ -166,18 +135,9 @@ def update_data(csv_path, df, key="id", sort="subreddit_name", save=False):
     ...     comment_data=comment_data,
     ...     replies_data=replies_data
     ... )
-    >>> # convert data to pandas DataFrame
-    >>> posts_df = rdc.to_pandas(posts)
-    >>> comments_df = rdc.to_pandas(comments)
     >>> # update existing .csv file
     >>> new_posts_df = rdc.update_data("post_data.csv", posts_df)
     >>> new_comments_df = rdc.update_data("comment_data.csv", comments_df)
-    >>> # save updated data with pandas rather than save parameter
-    >>> new_posts_df.to_csv("post_data.csv", index=False)
-    >>> new_comments_df.to_csv("comment_data.csv", index=False)
-
-    Note that all of the parameters passed to `DataCollector` in the above
-    example are fake.
     """
 
     if not set(pd.read_csv(csv_path).columns) == set(df.columns):
