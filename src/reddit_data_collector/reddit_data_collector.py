@@ -8,15 +8,12 @@ which stands for "The Python Reddit API Wrapper".  It aims to make it very
 simple for a user to collect data from Reddit, without having to learn the
 inner workings of PRAW or the Reddit API.
 
-The main functionalities provided by the module currently include:
-    1. Ability to collect a sample of post data and comment data from Reddit
-       by simply providing the subreddit names that you wish to collect data
-       from.
-    2. Ability to convert that data into a pandas `DataFrame` in order to 
-       inspect it and save it for further use.
-    3. Ability to seamlessly update an existing .csv file that contains some 
-       sample data collected with the module in the past, with some new 
-       sample data that is also collected with the module.
+Reddit Data Collector provides the ability to collect a sample of post data 
+and comment data from Reddit by simply providing the subreddit names 
+that you wish to collect data from.  By default, the data is returned in
+the form of a Pandas DataFrame.  There is also functionality to seamlessly 
+update an existing .csv file that contains some reddit data collected with 
+the module in the past, with some new data that been collected.
 
 The functionalities above should allow a user to build a good sample of Reddit 
 data over a period of time.  For example, a user could collect a sample from 
@@ -25,7 +22,7 @@ universal `.csv` file in order to compile the data. At the end of the month,
 the user would have a months worth data sampled from Reddit, for which they 
 could now analyze further (e.g. with Natural Language Processing).
 
-The creation of Reddit Data Collector was inspired since the Reddit API does 
+The creation of Reddit Data Collector was inspired since the Reddit API does
 not allow you to perform one large scrape of historical data (e.g. collect 
 all posts from subreddit X from January 2015 to December 2020).  Therefore
 this module provides an alternative option to build a data set by collecting
@@ -35,6 +32,7 @@ data over time.
 import praw
 
 from tqdm import tqdm
+from .io import to_pandas
 from .exceptions import SubredditError, FilterError
 
 
@@ -98,25 +96,17 @@ class DataCollector:
     ...     "FakePassword"
     ... )
     >>> # collect some data from Reddit
-    >>> subreddits = ["pics", "funny"]
-    >>> post_filter = "hot"
-    >>> comment_data = True
-    >>> replies_data = True
-    >>> posts, comments = data_collector(
-    ...     subreddits=subreddits,
-    ...     post_filter=post_filter,
-    ...     comment_data=comment_data,
-    ...     replies_data=replies_data
+    >>> posts, comments = data_collector.get_data(
+    ...     subreddits=["pics", "funny"],
+    ...     post_filter="hot",
+    ...     post_limit=10,
+    ...     comment_data=True,
+    ...     replies_data=True,
+    ...     replace_more_limit=0
     ... )
-    >>> # convert data to pandas DataFrame
-    >>> posts_df = rdc.to_pandas(posts)
-    >>> comments_df = rdc.to_pandas(comments)
     >>> # save data as .csv files
-    >>> posts_df.to_csv("posts.csv", index=False)
-    >>> comments_df.to_csv("posts.csv", index=False)
-
-    Note that all of the parameters passed to `DataCollector` in the above
-    example are fake.
+    >>> posts.to_csv("posts.csv", index=False)
+    >>> comments.to_csv("posts.csv", index=False)
     """
 
     def __init__(
@@ -139,6 +129,7 @@ class DataCollector:
         comment_data=True,
         replies_data=False,
         replace_more_limit=0,
+        dataframe=True,
     ):
         """Collects post and comment data from Reddit.
 
@@ -187,21 +178,23 @@ class DataCollector:
             For more info on the PRAW `MoreComment` class read this:
             https://praw.readthedocs.io/en/stable/tutorials/comments.html
 
+        dataframe : bool, default=True
+            Whether or not to return the collected data as a pandas DataFrame.
+            If False, the data is returned in the raw form of a dictionary,
+            where the keys for each dictionary are the subreddit name(s) and
+            the values for each dictionary are the data collected.
+
         Returns
         -------
-        posts, comments : dict, dict OR dict, None
-            Python dictionaries containing the post and comment data.  The keys
-            for each dictionary are the subreddit name(s).  The values for each
-            dictionary are the data collected.  The data collected is stored as a
-            Python list, where each entry in the list is a dictionary that contains
-            the relevant features for each post or comment data.
-
+        posts, comments : pandas DataFrames
+            The collected reddit data.
             If `comment_data` is False, `None` is returned for `comments`.
 
         See Also
         --------
         reddit_data_collector.io.to_pandas
-            Used to convert `posts` or `comments` to a pandas `DataFrame`.
+            Used to convert raw `posts` or `comments` to a pandas `DataFrame`.
+            Not needed if dataframe argument is left as True.
 
         reddit_data_collector.io.update_data
             Used to update an existing `.csv` file that contains prior data collected
@@ -222,6 +215,12 @@ class DataCollector:
             comments = self._get_comments(posts, replies_data, replace_more_limit)
         else:
             comments = None
+
+        if dataframe:
+            posts = to_pandas(posts)
+
+            if comments is not None:
+                comments = to_pandas(comments)
 
         return posts, comments
 
