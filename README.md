@@ -7,14 +7,6 @@
 
 Reddit Data Collector is a Python package that allows a user to collect post and comment data from Reddit. It is built on top of the Python module [PRAW](https://praw.readthedocs.io/en/stable/), which stands for "The Python Reddit API Wrapper". It aims to make it very simple for a user to collect data from Reddit for further analysis (e.g. Natural Language Processing), without having to learn the inner workings of PRAW or the Reddit API.
 
-The main functionalities provided by the package currently include:
-
-1. Ability to collect a sample of post data and comment data from Reddit by simply providing the subreddit names that you wish to collect data from.
-
-2. Ability to convert that data into a pandas `DataFrame` in order to inspect it and save it for further use.
-
-3. Ability to seamlessly update an existing .csv file that contains some sample data collected with the package in the past, with some new sample data that is also collected with the package.
-
 It is currently maintained by [Nico Van den Hooff](https://www.nicovandenhooff.com/).
 
 ## Installation
@@ -43,9 +35,9 @@ Please see the [examples directory](https://github.com/nicovandenhooff/reddit-da
 
 ### Important links
 
-- Official source code repo: https://github.com/nicovandenhooff/reddit-data-collector
-- Downloaded releases: https://pypi.org/project/reddit-data-collector/
-- Issue tracker: https://github.com/nicovandenhooff/reddit-data-collector/issues
+- Official source code repo: <https://github.com/nicovandenhooff/reddit-data-collector>
+- Downloaded releases: <https://pypi.org/project/reddit-data-collector/>
+- Issue tracker: <https://github.com/nicovandenhooff/reddit-data-collector/issues>
 
 ### Source code
 
