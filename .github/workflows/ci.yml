@@ -1,6 +1,6 @@
 # automatically runs tests upon push or pr to main
 
-name: Continuous integration
+name: ci
 
 on:
   push:
