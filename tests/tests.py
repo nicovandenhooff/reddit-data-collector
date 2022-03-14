@@ -373,6 +373,7 @@ def test_get_data_posts_and_comments():
     comment_data = True
     replies_data = False
     replace_more_limit = 0
+    dataframe = False
 
     posts, comments = data_collector.get_data(
         subreddits,
@@ -382,6 +383,7 @@ def test_get_data_posts_and_comments():
         comment_data,
         replies_data,
         replace_more_limit,
+        dataframe,
     )
 
     # checks that post data for all subreddits is all good
@@ -422,6 +424,7 @@ def test_get_data_posts_only():
     post_limit = 1
     top_post_filter = None
     comment_data = False
+    dataframe = False
 
     posts, comments = data_collector.get_data(
         subreddits,
@@ -429,6 +432,7 @@ def test_get_data_posts_only():
         post_limit,
         top_post_filter,
         comment_data,
+        dataframe=dataframe,
     )
 
     assert isinstance(posts, dict)
@@ -444,6 +448,147 @@ def test_get_data_posts_only():
     assert len(posts[subreddits[0]][0]) == 15
     assert len(posts[subreddits[1]][0]) == 15
 
+    assert comments is None
+
+
+def test_get_data_posts_and_comments():
+    """Tests getting the post and comment data for multiple subreddits."""
+    data_collector = load_data_collector()
+
+    subreddits = ["pics", "learnmachinelearning"]
+    post_filter = "hot"
+    post_limit = 1
+    top_post_filter = None
+    comment_data = True
+    replies_data = False
+    replace_more_limit = 0
+    dataframe = False
+
+    posts, comments = data_collector.get_data(
+        subreddits,
+        post_filter,
+        post_limit,
+        top_post_filter,
+        comment_data,
+        replies_data,
+        replace_more_limit,
+        dataframe,
+    )
+
+    # checks that post data for all subreddits is all good
+    assert isinstance(posts, dict)
+    assert isinstance(posts[subreddits[0]], list)
+    assert isinstance(posts[subreddits[1]], list)
+    assert isinstance(posts[subreddits[0]][0], dict)
+    assert isinstance(posts[subreddits[1]][0], dict)
+    assert posts[subreddits[0]][0]["subreddit_name"] == subreddits[0]
+    assert posts[subreddits[1]][0]["subreddit_name"] == subreddits[1]
+    assert len(posts) == len(subreddits)
+    assert len(posts[subreddits[0]]) == post_limit
+    assert len(posts[subreddits[1]]) == post_limit
+    assert len(posts[subreddits[0]][0]) == 15
+    assert len(posts[subreddits[1]][0]) == 15
+
+    # checks that comment data for all subreddits is all good
+    assert isinstance(comments, dict)
+    assert isinstance(comments[subreddits[0]], list)
+    assert isinstance(comments[subreddits[1]], list)
+    assert isinstance(comments[subreddits[0]][0], dict)
+    assert isinstance(comments[subreddits[1]][0], dict)
+    assert comments[subreddits[0]][0]["subreddit_name"] == subreddits[0]
+    assert comments[subreddits[1]][1]["subreddit_name"] == subreddits[1]
+    assert len(comments) == len(subreddits)
+    assert len(comments[subreddits[0]]) > 0
+    assert len(comments[subreddits[1]]) > 0
+    assert len(comments[subreddits[0]][0]) == 10
+    assert len(comments[subreddits[1]][0]) == 10
+
+
+def test_get_data_posts_only():
+    """Tests getting only the post data for multiple subreddits."""
+    data_collector = load_data_collector()
+
+    subreddits = ["pics", "learnmachinelearning"]
+    post_filter = "hot"
+    post_limit = 1
+    top_post_filter = None
+    comment_data = False
+    dataframe = False
+
+    posts, comments = data_collector.get_data(
+        subreddits,
+        post_filter,
+        post_limit,
+        top_post_filter,
+        comment_data,
+        dataframe=dataframe,
+    )
+
+    assert isinstance(posts, dict)
+    assert isinstance(posts[subreddits[0]], list)
+    assert isinstance(posts[subreddits[1]], list)
+    assert isinstance(posts[subreddits[0]][0], dict)
+    assert isinstance(posts[subreddits[1]][0], dict)
+    assert posts[subreddits[0]][0]["subreddit_name"] == subreddits[0]
+    assert posts[subreddits[1]][0]["subreddit_name"] == subreddits[1]
+    assert len(posts) == len(subreddits)
+    assert len(posts[subreddits[0]]) == post_limit
+    assert len(posts[subreddits[1]]) == post_limit
+    assert len(posts[subreddits[0]][0]) == 15
+    assert len(posts[subreddits[1]][0]) == 15
+
+    assert comments is None
+
+
+def test_get_data_posts_and_comments_pandas():
+    """Tests getting the post and comment data as pandas DataFrames."""
+    data_collector = load_data_collector()
+
+    subreddits = ["pics", "learnmachinelearning"]
+    post_filter = "hot"
+    post_limit = 1
+    top_post_filter = None
+    comment_data = True
+    replies_data = False
+    replace_more_limit = 0
+    dataframe = True
+
+    posts, comments = data_collector.get_data(
+        subreddits,
+        post_filter,
+        post_limit,
+        top_post_filter,
+        comment_data,
+        replies_data,
+        replace_more_limit,
+        dataframe,
+    )
+
+    assert isinstance(posts, pd.DataFrame)
+    assert isinstance(comments, pd.DataFrame)
+
+
+def test_get_data_posts_only_pandas():
+    """Tests getting only the post data as a pandas DataFrame."""
+    data_collector = load_data_collector()
+
+    subreddits = ["pics", "learnmachinelearning"]
+    post_filter = "hot"
+    post_limit = 1
+    top_post_filter = None
+    comment_data = False
+    dataframe = True
+
+    posts, comments = data_collector.get_data(
+        subreddits,
+        post_filter,
+        post_limit,
+        top_post_filter,
+        comment_data,
+        dataframe=dataframe,
+    )
+
+    assert isinstance(posts, pd.DataFrame)
     assert comments is None
 
 
